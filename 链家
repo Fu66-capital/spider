@@ -1,0 +1,24 @@
+import re
+import requests
+
+hds = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36'}
+regions=[u"东城",u"西城",u"朝阳",u"海淀",u"丰台",u"石景山","通州",u"昌平",u"大兴",u"亦庄开发区",u"顺义",u"房山",u"门头沟",u"平谷",u"怀柔",u"密云",u"延庆",u"燕郊"]
+url = 'http://bj.lianjia.com/xiaoqu/pg1rs%E6%98%8C%E5%B9%B3/'
+
+req = requests.get(url,headers=hds).text
+print(req)
+
+xiaoqu_list=re.findall('div',)
+
+
+for xq in xiaoqu_list:
+    info_dict={}
+    info_dict.update({u'小区名称':xq.find('a').text})
+    content=unicode(xq.find('div',{'class':'con'}).renderContents().strip())
+    info=re.match(r".+>(.+)</a>.+>(.+)</a>.+</span>(.+)<span>.+</span>(.+)",content)
+    if info:
+        info=info.groups()
+        info_dict.update({u'大区域':info[0]})
+        info_dict.update({u'小区域':info[1]})
+        info_dict.update({u'小区户型':info[2]})
+        info_dict.update({u'建造时间':info[3][:4]})
