@@ -1,0 +1,37 @@
+import re
+import requests
+
+import random
+
+hds = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36'}
+
+url = 'https://www.baidu.com/s?ie=utf-8&cl=2&medium=0&rtt=1&bsst=1&tn=news&word=%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4&rsv_sug3=7&rsv_sug4=344&rsv_sug1=9&oq=alibaba&rsv_sug2=0&f=3&rsp=0&rsv_dl=news_t_sug&inputT=2870'
+res = requests.get(url,headers=hds).text
+print(res)
+
+p_info = '<p class="c-author">(.*?)</p>'
+info = re.findall(p_info,res,re.S)
+# print(info)
+# print(len(info))
+p_href = '<h3 class="c-title">.*?<a href="(.*?)"'
+href = re.findall(p_href,res,re.S)
+# print(href)
+p_title = '<h3 class="c-title">.*?>(.*?)</a>'
+title = re.findall(p_title,res,re.S)
+# print(title)
+source = []
+date = []
+for i in range(len(title)):
+    title[i] = title[i].strip()
+    title[i] = re.sub('<.*?>','',title[i])
+    info[i] = re.sub('<.*?>','',info[i])
+    info[i] = info[i].strip()
+    source.append(info[i].split('&nbsp;&nbsp;')[0])
+    date.append(info[i].split('&nbsp;&nbsp;')[1])
+    date[i] = date[i].strip()
+    source[i] = source[i].strip()
+    print(str(i+1)+','+title[i]+'('+date[i]+'-'+source[i]+')')
+    print(href[i])
+print(title)
+print(source)
+print(date)
