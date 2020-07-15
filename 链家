@@ -8,17 +8,21 @@ url = 'http://bj.lianjia.com/xiaoqu/pg1rs%E6%98%8C%E5%B9%B3/'
 req = requests.get(url,headers=hds).text
 print(req)
 
-xiaoqu_list=re.findall('div',)
+p_href = '<div class="info">.*?<div class="title">.*?<a href="(.*?)"'
+xiaoqu_href=re.findall(p_href,req,re.S)
+print(xiaoqu_href)
 
-
-for xq in xiaoqu_list:
-    info_dict={}
-    info_dict.update({u'小区名称':xq.find('a').text})
-    content=unicode(xq.find('div',{'class':'con'}).renderContents().strip())
-    info=re.match(r".+>(.+)</a>.+>(.+)</a>.+</span>(.+)<span>.+</span>(.+)",content)
-    if info:
-        info=info.groups()
-        info_dict.update({u'大区域':info[0]})
-        info_dict.update({u'小区域':info[1]})
-        info_dict.update({u'小区户型':info[2]})
-        info_dict.update({u'建造时间':info[3][:4]})
+p_href_name = '<div class="info">.*?<div class="title">.*?<a href=".*?" target="_blank">(.*?)</a>'
+xiaoqu_name = re.findall(p_href_name,req,re.S)
+print(xiaoqu_name)
+# for xq in xiaoqu_list:
+#     info_dict={}
+#     info_dict.update({u'小区名称':xq.find('a').text})
+#     content=unicode(xq.find('div',{'class':'con'}).renderContents().strip())
+#     info=re.match(r".+>(.+)</a>.+>(.+)</a>.+</span>(.+)<span>.+</span>(.+)",content)
+#     if info:
+#         info=info.groups()
+#         info_dict.update({u'大区域':info[0]})
+#         info_dict.update({u'小区域':info[1]})
+#         info_dict.update({u'小区户型':info[2]})
+#         info_dict.update({u'建造时间':info[3][:4]})
